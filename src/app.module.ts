@@ -6,6 +6,8 @@ import { AppService } from './app.service.js';
 import { UsersModule } from './users/users.module.js';
 import { StudentsModule } from './students/students.module.js';
 import { CoursesModule } from './courses/courses.module.js';
+import { RecipesModule } from './recipes/recipes.module.js';
+import { VideosModule } from './videos/videos.module.js';
 import configuration from './common/config.js';
 
 @Module({
@@ -31,6 +33,8 @@ import configuration from './common/config.js';
     UsersModule,
     StudentsModule,
     CoursesModule,
+    RecipesModule,
+    VideosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

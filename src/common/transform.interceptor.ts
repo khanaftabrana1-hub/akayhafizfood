@@ -12,17 +12,44 @@ export class TransformInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((res) => {
         
-        const message = res?.message || 'Kamyabi ke sath data mil gaya hai!';
-        
-        
-        const { message: _, ...actualData } = res || {};
+        if (res === null || res === undefined) {
+          return {
+            status: 'success',
+            statusCode: statusCode,
+            message: 'Kamyabi ke sath data mil gaya hai!',
+            data: null,
+          };
+        }
 
+        
+        if (Array.isArray(res)) {
+          return {
+            status: 'success',
+            statusCode: statusCode,
+            message: 'Kamyabi ke sath data mil gaya hai!',
+            data: res,
+          };
+        }
+
+      
+        
+        if (typeof res === 'object' && 'message' in res) {
+          const { message, ...actualData } = res;
+          return {
+            status: 'success',
+            statusCode: statusCode,
+            message: message,
+            data: Object.keys(actualData).length > 0 ? actualData : null,
+          };
+        }
+
+        
         return {
           status: 'success',
-          statusCode: statusCode,
-          message: message,
-          data: Object.keys(actualData).length > 0 ? actualData : res,
-        };
+            statusCode: statusCode,
+            message: 'Kamyabi ke sath data mil gaya hai!',
+            data: res,
+          };
       }),
     );
   }
