@@ -1,4 +1,5 @@
-import { IsString, IsNotEmpty, IsOptional, IsUrl, IsArray } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
+import { Transform } from 'class-transformer'; 
 
 export class CreateRecipeDto {
   @IsString()
@@ -9,16 +10,26 @@ export class CreateRecipeDto {
   @IsNotEmpty()
   description: string;
 
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value); 
+      } catch {
+        return value.split(',').map((item) => item.trim()); 
+      }
+    }
+    return value;
+  })
   @IsArray()
   @IsString({ each: true })
-  @IsOptional()
-  ingredients: string[];
+  ingredients?: string[];
 
-  @IsUrl()
   @IsOptional()
-  imageUrl: string;
+  @IsString()
+  imageUrl?: string; 
 
-  @IsUrl()
   @IsOptional()
-  videoUrl: string;
+  @IsString()
+  videoUrl?: string;
 }
